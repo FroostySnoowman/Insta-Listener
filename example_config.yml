@@ -1,0 +1,17 @@
+General:
+    TOKEN: "" # bot token
+    ACTIVITY: "listening" # playing, watching, listening, streaming
+    DOING_ACTIVITY: "Instagram" # what you want the bot to be playing, watching, or listening
+    STREAMING_ACTIVITY_TWITCH_URL: "" # twitch url if ACTIVITY is "streaming"
+    STATUS: "online" # online, idle, dnd, invisible
+    GUILD_ID: 1234 # guild id for the server
+    EMBED_COLOR: "#9C27B0" # hex color code for embeds
+
+Roles:
+    PING_ROLE_ID: 1234 # ping role id
+
+Listening_Categories:
+    - 1234 # listening categories
+
+Keyword_Categories:
+    - 1234 # keyword categories

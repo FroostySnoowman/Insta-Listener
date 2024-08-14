@@ -7,6 +7,10 @@ General:
     GUILD_ID: 1234 # guild id for the server
     EMBED_COLOR: "#9C27B0" # hex color code for embeds
 
+Instagram:
+    USERNAME: "" # instagram username
+    PASSWORD: "" # instagram password
+
 Roles:
     PING_ROLE_ID: 1234 # ping role id
 

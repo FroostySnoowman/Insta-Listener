@@ -14,6 +14,8 @@ guild_id = data["General"]["GUILD_ID"]
 embed_color = data["General"]["EMBED_COLOR"]
 ping_role_id = data["Roles"]["PING_ROLE_ID"]
 listening_categories = data["Listening_Categories"]
+instagram_username = data["Instagram"]["USERNAME"]
+instagram_password = data["Instagram"]["PASSWORD"]
 
 class ListenCog(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
@@ -32,6 +34,7 @@ class ListenCog(commands.Cog):
             listeners = await cursor.fetchall()
 
             L = instaloader.Instaloader()
+            L.login(instagram_username, instagram_password)
 
             for listener in listeners:
                 username = listener[0]

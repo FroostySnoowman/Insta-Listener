@@ -54,7 +54,7 @@ class ListenCog(commands.Cog):
                 posts = []
 
                 posts.extend(profile.get_posts())
-                posts.extend(profile.get_igtv_posts())
+                #posts.extend(profile.get_igtv_posts())
 
                 if posts:
                     most_recent_post = None

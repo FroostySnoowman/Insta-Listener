@@ -1,4 +1,4 @@
 discord.py==2.3.2
-instaloader==4.12
+instaloader==4.13
 aiosqlite==0.20.0
 pyyaml==6.0.1

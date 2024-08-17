@@ -1,9 +1,11 @@
 import discord
-import instaloader
 import aiosqlite
+import instaloader
+import asyncio
 import yaml
 import json
 from discord import app_commands
+from instaloader import Instaloader
 from discord.ext import commands, tasks
 from datetime import datetime
 
@@ -33,15 +35,20 @@ class ListenCog(commands.Cog):
             cursor = await db.execute('SELECT * FROM listeners')
             listeners = await cursor.fetchall()
 
-            L = instaloader.Instaloader()
-            L.login(instagram_username, instagram_password)
+            L = Instaloader()
+            await asyncio.to_thread(L.login, instagram_username, instagram_password)
+
+            print(L)
 
             for listener in listeners:
+                print(listener)
                 username = listener[0]
                 channel_id = listener[1]
                 posts = listener[2]
 
                 profile = instaloader.Profile.from_username(L.context, username)
+                print(profile.username)
+                print(profile.profile_pic_url)
                 profile_image_url = profile.profile_pic_url
                 channel = self.bot.get_channel(channel_id)
                 posts_list = json.loads(posts)
@@ -53,8 +60,16 @@ class ListenCog(commands.Cog):
 
                 posts = []
 
+                print(profile.get_posts())
+
+                for aaa in profile.get_posts():
+                    print(aaa)
+
                 posts.extend(profile.get_posts())
-                #posts.extend(profile.get_igtv_posts())
+                print(posts)
+                # posts.extend(await asyncio.to_thread(list, profile.get_igtv_posts()))
+
+                print('here')
 
                 if posts:
                     most_recent_post = None
@@ -71,7 +86,7 @@ class ListenCog(commands.Cog):
 
                         if post_url in posts_list:
                             continue
-                    
+                        
                         cursor = await db.execute('SELECT * FROM keywords')
                         keywords = await cursor.fetchall()
 
@@ -108,6 +123,8 @@ class ListenCog(commands.Cog):
                         embed.timestamp = datetime.now()
 
                         await channel.send(content=ping_role.mention, embed=embed)
+                
+                await asyncio.sleep(30)
 
     @listenerLoop.before_loop
     async def before_my_task(self):
@@ -145,7 +162,8 @@ class ListenCog(commands.Cog):
                 await interaction.followup.send(embed=embed)
                 return
             
-            L = instaloader.Instaloader()
+            L = Instaloader()
+            await asyncio.to_thread(L.login, instagram_username, instagram_password)
             
             try:
                 profile = instaloader.Profile.from_username(L.context, username)
@@ -160,6 +178,8 @@ class ListenCog(commands.Cog):
 
             await db.execute('INSERT INTO listeners VALUES (?,?,?);', (username, channel.id, post_list))
             await db.commit()
+
+            self.listenerLoop.restart()
 
             embed = discord.Embed(title="Listener", description=f"**{username}** is now being listened for new Instagram posts.", color=discord.Color.from_str(embed_color))
             await interaction.followup.send(embed=embed)
